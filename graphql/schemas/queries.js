@@ -2,15 +2,13 @@ const { gql } = require('apollo-server')
 
 const queries = gql`
   type Query {
-    products: [Product]
-    product(id: Int!): Product
-    laptops: [Laptop]
     articles(onlyPublished: Boolean): [Article]
-    articleList(limit: Int, onlyUnpublished: Boolean, onlytoPublish: Boolean): [String]
-    latestComparisons(limit: Int): [LinkList]
     articleContent(url: String): ArticleContent
     articleData(url: String): ArticleData
+    articleUrls(limit: Int, onlyUnpublished: Boolean, onlytoPublish: Boolean): [String]
     internalLinks(url: String): [LinkList]
+    laptop(productId: Int!): LaptopSpecsSlim
+    latestComparisons(limit: Int): [LinkList]
   }
 `
 

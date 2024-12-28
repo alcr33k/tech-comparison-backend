@@ -1,17 +1,17 @@
 const Database = require('better-sqlite3')
 const db = new Database('./products.db')
-const { mapLinkList } = require('../utils/mappingFunctions')
+const { mapLinkList, getRandomSubarray } = require('../utils')
 
 /**
  * Inserts internal links for given article ids
  *
  * @param {Object} input - The input with the articles to create internal links for
  * @param {Array<String>} [input.articleUrls] - The urls of the articles to create internal links for
- * @returns {Promise<Object>} - A promise that resolves when the insert is complete.
+ * @returns {Promise<Boolean>} - A promise that resolves when the insert is complete.
  */
 const generateInternalLinks = ({ articleUrls }) => {
   try {
-    for (url of articleUrls) {
+    for (const url of articleUrls) {
       // Get current article id
       const sql1 = 'SELECT * FROM article WHERE url = ?'
       const currentArticleData = db.prepare(sql1).get(url)
@@ -19,7 +19,7 @@ const generateInternalLinks = ({ articleUrls }) => {
       // Check if url already has internal links, if it has continue
       const sql2 = 'SELECT * FROM internal_link WHERE article_link_from = ?'
       const existingLinks = db.prepare(sql2).all(currentArticleId)
-      if (existingLinks?.length && articleUrls.length > 0) {
+      if (existingLinks?.length) { // existingLinks?.length && articleUrls.length > 0
         continue
       }
       // Get all published articles
@@ -29,7 +29,7 @@ const generateInternalLinks = ({ articleUrls }) => {
       // For now take 5 random published articles, later use more complex logic for deciding what to link to
       const randomIds = getRandomSubarray(publishedIds, 5)
       const insertSQL = db.prepare('INSERT INTO internal_link (article_link_from, article_link_to, anchor) VALUES (?, ?, (SELECT title FROM article_meta WHERE article_id = ?))')
-      for (id of randomIds) {
+      for (const id of randomIds) {
         insertSQL.run(currentArticleId, id, id)
       }
     }
@@ -40,7 +40,14 @@ const generateInternalLinks = ({ articleUrls }) => {
   }
 }
 
-const fetchInternalLinks = ({url}) => {
+/**
+ * Fetches internal links for a given article URL.
+ *
+ * @param {Object} input - The input with the article URL to fetch internal links for.
+ * @param {String} input.url - The URL of the article to fetch internal links for.
+ * @returns {Promise<Array<Object>>} - A promise that resolves to an array of internal link objects.
+ */
+const fetchInternalLinks = ({ url }) => {
   const sql = `
   SELECT 
     a_to.url, 
@@ -53,28 +60,6 @@ const fetchInternalLinks = ({url}) => {
   `
   const stmt = db.prepare(sql).all(url)
   return mapLinkList(stmt)
-}
-
-/**
- * Generates a random subset of elements from the given array.
- *
- * @param {Array} arr - The original array from which to pick elements.
- * @param {number} size - The number of random elements to pick.
- * @returns {Array} An array containing `size` randomly picked, unique elements from `arr`.
- */
-function getRandomSubarray(arr, size) {
-  let result = [];
-  let filledIndices = new Set();
-
-  while (result.length < size) {
-    let index = Math.floor(Math.random() * arr.length);
-    if (!filledIndices.has(index)) {
-      result.push(arr[index]);
-      filledIndices.add(index);
-    }
-  }
-
-  return result;
 }
 
 module.exports = {

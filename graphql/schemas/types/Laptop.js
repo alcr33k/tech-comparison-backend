@@ -1,10 +1,6 @@
 const { gql } = require('apollo-server')
 
 module.exports = gql`
-  type Laptop {
-    id: ID!
-  }
-
   type Rating {
     overall: Int
     design: Int
@@ -51,7 +47,7 @@ module.exports = gql`
     lowestPotentialOperatingTemperature: String
     weatherSealed: Boolean
     isDustproofAndWaterResistant: Boolean
-    frenchRepairabilityIndex: String
+    frenchRepairabilityIndex: Float
     screenSize: Float
     resolution: Int
     pixelDensity: Int
@@ -62,7 +58,7 @@ module.exports = gql`
     contrastRatio: String
     hasAntiReflectionCoating: Boolean
     supportedDisplays: Int
-    blackLevel: String
+    blackLevel: Float
     gorillaGlassVersion: String
     ram: String
     ramSpeed: Int
@@ -109,7 +105,7 @@ module.exports = gql`
     uploadSpeed: String
     hasAirplay: Boolean
     miniDisplayportOutputs: Int
-    hasAVgaConnector: String
+    hasAVgaConnector: Boolean
     batteryLife: String
     chargeTime: String
     batteryPower: Int
@@ -133,9 +129,9 @@ module.exports = gql`
     hasACompass: Boolean
     hasAnOpticalDiscDrive: Boolean
     clockMultiplier: Int
-    l2Core: Int
-    l2Cache: Int
-    l1Cache: Int
+    l2Core: Float
+    l2Cache: Float
+    l1Cache: Float
     supportsEccMemory: Boolean
     hasNxBit: Boolean
     memoryChannels: Int

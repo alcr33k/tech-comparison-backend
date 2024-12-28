@@ -1,17 +1,17 @@
 const Database = require('better-sqlite3')
 const db = new Database('./products.db')
-const { mapArticleData, mapArticleContent, mapLinkList, mapSectionId } = require('../utils/mappingFunctions')
+const { mapArticleData, mapArticleContent, mapLinkList, mapSectionId } = require('../utils')
 
 /**
- * Fetches all articles, can also limit it or only return published articles
+ * Fetch a list of article urls.
  *
  * @param {Object} input - The options for fetching articles.
- * @param {number} [input.limit] - The limit of articles to fetch.
+ * @param {number} [input.limit] - How many articles to fetch.
  * @param {boolean} [input.onlyUnpublished] - Whether to fetch only unpublished articles.
- * @param {boolean} [input.onlytoPublish] - Whether to fetch only articles with a date_to_publish < NOW()
+ * @param {boolean} [input.onlytoPublish] - Whether to fetch only articles with a date_to_publish < NOW().
  * @returns {Array} - An array of articles.
  */
-const fetchArticleList = ({ limit, onlyUnpublished, onlytoPublish }) => {
+const fetchArticleUrls = ({ limit, onlyUnpublished, onlytoPublish }) => {
   let sql = 'SELECT url FROM article'
   const params = []
   const conditions = []
@@ -96,12 +96,16 @@ const updatePublishedDate = ({ articleUrls }) => {
  * @param {Object} input - The input specifying the article id.
  * @param {number} input.article_id - The ID of the article to update.
  * @param {number} input.sectionsToChange - The sections and content to change.
- * @returns {Promise<Boolean>} - A promise that resolves when the update is complete.
+ * @returns {Boolean} - A promise that resolves when the update is complete.
  */
 const updateArticle = ({ articleId, sectionsToChange }) => {
   try {
     Object.entries(sectionsToChange).forEach(([sectionName, content]) => {
       const sectionId = mapSectionId(sectionName)
+      if (!sectionId) {
+        return false
+      }
+
       const sql = `
       UPDATE article_content 
         SET content = ? 
@@ -119,12 +123,12 @@ const updateArticle = ({ articleId, sectionsToChange }) => {
 }
 
 /**
- * Updates the published_date of an article to the current date.
+ * Fetches article data for a given URL, including details about laptops.
  *
- * @param {Object} input - The input specifying the url.
- * @param {number} input.url - The url of the article to get the data.
- * @returns {Promise<Object>} - A promise that resolves to an object of article data.
-*/
+ * @param {Object} input - The input containing the article URL.
+ * @param {string} input.url - The URL of the article to fetch data for.
+ * @returns {Promise<Object>} - A promise that resolves to an object containing laptop data, such as names, ratings, sizes, benchmarks, and specifications.
+ */
 const fetchArticleData = ({ url }) => {
   const sql = `
   SELECT
@@ -152,19 +156,13 @@ const fetchArticleData = ({ url }) => {
 }
 
 /**
- * Updates the published_date of an article to the current date.
+ * Fetches article content for a given URL, including sections like introduction, design, performance, and more.
  *
- * @param {Object} input - The input specifying the article id.
- * @param {number} input.url - The url of the article to get the data.
- * @param {number | null} input.limit - The limit of articles to fetch.
- * @returns {Promise<Object>} - A promise that resolves to an object of article data.
-*/
+ * @param {Object} input - The input containing the article URL.
+ * @param {string} input.url - The URL of the article to fetch content for.
+ * @returns {Promise<Object>} - A promise that resolves to an object containing various sections of article content.
+ */
 const fetchArticleContent = ({ url }) => {
-  // fetchArticleContent (will return articleSections, reasonsToGet, meta)
-  // articleSections, gets all article sections based on url
-  // reasonsToGet (based on new table, for reasons to get table)
-  // meta, seo meta from article_meta table
-  console.log(url)
   const sql = `
   SELECT 
     article_meta.*, 
@@ -208,7 +206,7 @@ const fetchLatestComparisons = ({ limit = 5 }) => {
 
 module.exports = {
   fetchArticles,
-  fetchArticleList,
+  fetchArticleUrls,
   updatePublishedDate,
   fetchArticleData,
   fetchArticleContent,

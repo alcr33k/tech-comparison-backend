@@ -3,11 +3,11 @@ function mapArticleData (sqlData) {
     names: [
       {
         fullName: sqlData.laptop1FullName,
-        shortName: sqlData.laptop1ShortName,
+        shortName: sqlData.laptop1ShortName
       },
       {
         fullName: sqlData.laptop2FullName,
-        shortName: sqlData.laptop2ShortName,
+        shortName: sqlData.laptop2ShortName
       }
     ],
     ratings: [
@@ -78,7 +78,7 @@ function mapArticleData (sqlData) {
       {
         batteryLife: sqlData.laptop2BatteryLife,
         batteryPower: sqlData.laptop2BatteryPower,
-        screenSize: sqlData.lapto21ScreenSize,
+        screenSize: sqlData.laptop2ScreenSize,
         resolution: sqlData.laptop2Resolution,
         displayType: sqlData.laptop2ScreenType,
         refreshRate: sqlData.laptop2RefreshRate,
@@ -118,7 +118,7 @@ function mapLinkList (sqlData) {
   }))
 }
 
-const mapSectionId = (sectionName) => {
+function mapSectionId (sectionName) {
   const sectionMapping = {
     intro: 1,
     design: 2,
@@ -133,6 +133,6 @@ const mapSectionId = (sectionName) => {
   }
 
   return sectionMapping[sectionName] || null
-};
+}
 
 module.exports = { mapArticleData, mapArticleContent, mapLinkList, mapSectionId }

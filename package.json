@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "jest ./tests --coverage",
+    "lint": "standard",
+    "lint:fix": "standard --fix"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +16,12 @@
     "apollo-server": "^3.13.0",
     "better-sqlite3": "^9.5.0",
     "graphql": "^16.8.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "standard": "^17.1.2"
+  },
+  "standard": {
+    "env": [ "jest" ]
   }
 }
