@@ -6,7 +6,7 @@ const db = new Database('./products.db')
  *
  * @param {Object} input - The input with the product ID to fetch laptop data for.
  * @param {number} input.productId - The product ID of the laptop to fetch data for.
- * @returns {Promise<Object>} - A promise that resolves to an object containing the laptop specifications.
+ * @returns {Object} - An object containing the laptop specifications.
  */
 const fetchLaptopData = ({ productId }) => {
   const sql = `

@@ -7,7 +7,7 @@ const { mapLinkList, getRandomSubarray } = require('../utils')
  *
  * @param {Object} input - The input with the articles to create internal links for
  * @param {Array<String>} [input.articleUrls] - The urls of the articles to create internal links for
- * @returns {Promise<Boolean>} - A promise that resolves when the insert is complete.
+ * @returns {Boolean} - A boolean indicating if it sucessfully generated 
  */
 const generateInternalLinks = ({ articleUrls }) => {
   try {
@@ -45,7 +45,7 @@ const generateInternalLinks = ({ articleUrls }) => {
  *
  * @param {Object} input - The input with the article URL to fetch internal links for.
  * @param {String} input.url - The URL of the article to fetch internal links for.
- * @returns {Promise<Array<Object>>} - A promise that resolves to an array of internal link objects.
+ * @returns {Array<Object>} - An array of internal link objects.
  */
 const fetchInternalLinks = ({ url }) => {
   const sql = `

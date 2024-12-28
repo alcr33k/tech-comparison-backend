@@ -42,7 +42,7 @@ const fetchArticleUrls = ({ limit, onlyUnpublished, onlytoPublish }) => {
  *
  * @param {Object} input - The options for fetching articles.
  * @param {boolean} [input.onlyUnpublished] - Whether to fetch only unpublished articles.
- * @returns {Promise<Array>} - A promise that resolves to an array of articles.
+ * @returns {Array} - An array of articles.
  */
 const fetchArticles = ({ onlyPublished }) => {
   let sql = `
@@ -67,7 +67,7 @@ const fetchArticles = ({ onlyPublished }) => {
  *
  * @param {Object} input - The input specifying the article id.
  * @param {number} input.article_id - The ID of the article to update.
- * @returns {Promise<Object>} - A promise that resolves when the update is complete.
+ * @returns {Object} - An object that indicate if the update completed sucessfully.
  */
 const updatePublishedDate = ({ articleUrls }) => {
   try {
@@ -96,7 +96,7 @@ const updatePublishedDate = ({ articleUrls }) => {
  * @param {Object} input - The input specifying the article id.
  * @param {number} input.article_id - The ID of the article to update.
  * @param {number} input.sectionsToChange - The sections and content to change.
- * @returns {Boolean} - A promise that resolves when the update is complete.
+ * @returns {Boolean} - A boolean that is true when the update is complete and false one errors.
  */
 const updateArticle = ({ articleId, sectionsToChange }) => {
   try {
@@ -127,7 +127,7 @@ const updateArticle = ({ articleId, sectionsToChange }) => {
  *
  * @param {Object} input - The input containing the article URL.
  * @param {string} input.url - The URL of the article to fetch data for.
- * @returns {Promise<Object>} - A promise that resolves to an object containing laptop data, such as names, ratings, sizes, benchmarks, and specifications.
+ * @returns {Object} - An object containing laptop data, such as names, ratings, sizes, benchmarks, and specifications.
  */
 const fetchArticleData = ({ url }) => {
   const sql = `
@@ -160,7 +160,7 @@ const fetchArticleData = ({ url }) => {
  *
  * @param {Object} input - The input containing the article URL.
  * @param {string} input.url - The URL of the article to fetch content for.
- * @returns {Promise<Object>} - A promise that resolves to an object containing various sections of article content.
+ * @returns {Object} - An object containing various sections of article content.
  */
 const fetchArticleContent = ({ url }) => {
   const sql = `
@@ -181,7 +181,7 @@ const fetchArticleContent = ({ url }) => {
  *
  * @param {Object} input - The options for fetching articles.
  * @param {number} [input.limit] - The amount of articles to fetch, deafult 5 articles.
- * @returns {Promise<Array>} - A promise that resolves to an array of article names and urls.
+ * @returns {Array} - An array of article names and urls.
  */
 const fetchLatestComparisons = ({ limit = 5 }) => {
   let sql = `
